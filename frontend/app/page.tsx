@@ -1,6 +1,6 @@
 'use client'
 
-import Menu from '@/app/components/Menu'
+import Menu from '@/components/layouts/Menu'
 
 export default function Page() {
   return (

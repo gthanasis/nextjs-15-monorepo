@@ -5,15 +5,15 @@
   "author": "Thanasis G.",
   "license": "MIT",
   "scripts": {
-    "predev": "node set-local-ip.js",
     "clean": "rm -rf dist",
     "prebuild": "npm run clean && npm run lint",
     "build": "tsc --build tsconfig.build.json",
     "lint": "eslint",
     "start": "node dist/index.js",
-    "dev": "TS_NODE_PROJECT='./tsconfig.build.json' ts-node-dev --exit-child src/index.ts",
+    "dev": "tsx watch src/index.ts --tsconfig tsconfig.build.json",
     "test:watch": "TS_NODE_PROJECT='./tsconfig.tests.json' mocha -r source-map-support/register -r ts-node/register --extension ts --recursive -w -b tests",
-    "test": "TS_NODE_PROJECT='./tsconfig.tests.json' mocha -r ts-node/register --extension ts --recursive --exit tests"
+    "test": "TS_NODE_PROJECT='./tsconfig.tests.json' mocha -r ts-node/register --extension ts --recursive --exit tests",
+    "check-types": "tsc --noEmit -p tsconfig.build.json"
   },
   "dependencies": {
     "@google-cloud/storage": "^7.13.0",
@@ -25,6 +25,7 @@
     "sharp": "^0.33.5",
     "sinon": "^19.0.2",
     "source-map-support": "^0.5.21",
+    "tsx": "^4.19.2",
     "typescript": "^5.6.3"
   },
   "resolutions": {
@@ -33,7 +34,6 @@
   "devDependencies": {
     "@types/multer": "^1.4.12",
     "@types/sinon": "^17.0.3",
-    "eslint-config-custom": "*",
-    "ts-node-dev": "^2.0.0"
+    "eslint-config-custom": "*"
   }
 }

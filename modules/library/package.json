@@ -5,10 +5,12 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc --build",
+    "dev": "tsc -w",
     "clean": "rm -rf dist",
     "lint": "eslint src --quiet --ext .js --fix",
     "test:watch": "mocha -r ts-node/register --extension js,ts --recursive -w -b ./tests/",
-    "test": "TS_NODE_PROJECT='./tsconfig.tests.json' mocha -r ts-node/register --extension js,ts --recursive --exit ./tests/"
+    "test": "TS_NODE_PROJECT='./tsconfig.tests.json' mocha -r ts-node/register --extension js,ts --recursive --exit ./tests/",
+    "check-types": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.42",

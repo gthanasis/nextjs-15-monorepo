@@ -4,7 +4,9 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc --build"
+    "build": "tsc --build",
+    "dev": "tsc -w",
+    "check-types": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",

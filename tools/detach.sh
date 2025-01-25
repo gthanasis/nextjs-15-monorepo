@@ -9,6 +9,7 @@ NAME=""
 DB=""
 DOMAIN=""
 BRANCH_PREFIX=""
+SCRIPT_NAME=$(basename "$0") # Get the name of the script
 
 # Print usage
 usage() {
@@ -79,6 +80,11 @@ find . -type f \
     ! -path "./.git/*" \
     ! -name "*.gitignore" |
 while read -r file; do
+    # Skip the script itself
+    if [[ $(basename "$file") == "$SCRIPT_NAME" ]]; then
+        continue
+    fi
+
     if grep -qE "PLACEHOLDER_NAME|PLACEHOLDER_NAME_BRANCH_PREFIX|PLACEHOLDER_NAME_DB|PLACEHOLDER_NAME_DOMAIN" "$file"; then
         replace_placeholders "$file"
     fi

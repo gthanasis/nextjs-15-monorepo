@@ -3,7 +3,7 @@ import sinon from 'sinon'
 import { UserService } from '../../src/useCases/users/service'
 import { UserRepository } from '../../src/useCases/users/repository'
 import { BunyanLogger } from 'logger'
-import { IUser } from 'project-types'
+import { IUser } from 'api-client'
 import {OrderFilters} from '../../src/types/common'
 
 describe('UserService', () => {

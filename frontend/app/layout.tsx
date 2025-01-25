@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
-import SessionProvider from './components/SessionProvider'
+import SessionProvider from '@/components/SessionProvider'
 import { getServerSession } from 'next-auth'
 import Script from 'next/script'
 

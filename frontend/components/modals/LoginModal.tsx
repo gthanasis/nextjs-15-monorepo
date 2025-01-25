@@ -1,7 +1,5 @@
 import Modal from '@/components/modals/Modal'
 import { LoginForm } from '@/components/forms/LoginForm'
-import { useEffect } from 'react'
-import renderGoogleButton from '@/lib/render-google-button'
 
 type Props = {
   trigger: React.ReactNode

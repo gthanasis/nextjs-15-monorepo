@@ -14,7 +14,7 @@ const handler = NextAuth({
       credentials: {
         idToken: { label: 'ID Token', type: 'text' },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         if (!credentials) return null
         const googleUser = await verifyGoogleIdToken(credentials.idToken)
         if (!googleUser) return null

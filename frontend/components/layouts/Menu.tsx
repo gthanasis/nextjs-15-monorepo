@@ -11,13 +11,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import React from 'react'
-import useGoogleOneTap from '@/app/hooks/useOneTapSignIn'
-import LoginModal from '@/components/authentication/LoginModal'
+import useGoogleOneTap from '@/hooks/useOneTapSignIn'
+import LoginModal from '@/components/modals/LoginModal'
+import Image from 'next/image'
 
 export default function Menu() {
   const { data } = useSession()
   const { user } = data || {}
-  const { prompt } = useGoogleOneTap({
+  useGoogleOneTap({
     clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
     onSuccess: async (credential) => {
       await signIn('credentials', { idToken: credential, redirect: false })
@@ -27,8 +28,6 @@ export default function Menu() {
     },
     autoSelect: false,
   })
-  const [modalOpen, setModalOpen] = React.useState(false)
-
   const logOut = () => {
     signOut()
   }
@@ -37,7 +36,7 @@ export default function Menu() {
     <DropdownMenu>
       <DropdownMenuTrigger>
         <div className="flex items-center justify-center">
-          <img
+          <Image
             className="h-8 w-8 rounded-full object-cover"
             src={user?.image || 'https://via.placeholder.com/150'}
             alt=""

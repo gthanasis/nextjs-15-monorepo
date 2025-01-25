@@ -4,7 +4,8 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc -w"
+    "dev": "tsc -w",
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "axios": "^1.6.0"

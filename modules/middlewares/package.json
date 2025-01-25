@@ -5,8 +5,10 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc --build",
+    "dev": "tsc -w",
     "test:watch": "mocha -r ts-node/register --extension js,ts --recursive -w -b ./tests/",
-    "test": "TS_NODE_PROJECT='./tests/tsconfig.json' mocha -r ts-node/register --extension js,ts --recursive --exit ./tests/"
+    "test": "TS_NODE_PROJECT='./tests/tsconfig.json' mocha -r ts-node/register --extension js,ts --recursive --exit ./tests/",
+    "check-types": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
