@@ -1,0 +1,48 @@
+version: "3.3"
+services:
+  backend:
+    image: localhost:5001/PLACEHOLDER_NAME-backend:local
+    environment:
+      LOG_LEVEL: TRACE
+      WEBAPP_URL: http://app.PLACEHOLDER_NAME.localhost
+      MONGO_CONNECTION_STRING: mongodb://control-msc-user:control-msc-pass@mongo:27017/PLACEHOLDER_NAME
+      ALLOW_DEMO_LOGIN: "true"
+      DEMO_LOGIN_COOKIE_DOMAIN: app.PLACEHOLDER_NAME.localhost
+      JWT_SECRET_TOKEN: "secret"
+  storage:
+    image: localhost:5001/PLACEHOLDER_NAME-storage:local
+    environment:
+      LOG_LEVEL: TRACE
+      WEBAPP_URL: http://app.PLACEHOLDER_NAME.localhost
+      MONGO_CONNECTION_STRING: mongodb://control-msc-user:control-msc-pass@mongo:27017/PLACEHOLDER_NAME_DB
+      JWT_SECRET_TOKEN: "secret"
+  frontend:
+    image: localhost:5001/PLACEHOLDER_NAME-frontend:local
+    build:
+      args:
+        # Real envs
+        - REACT_APP_API_ENDPOINT=http://api.PLACEHOLDER_NAME.localhost
+        - REACT_APP_STORAGE_API_ENDPOINT=http://api.PLACEHOLDER_NAME.localhost/storage
+        - REACT_APP_LOG_LEVEL=DEBUG
+    environment:
+      - SSL=false
+      - WEBAPP_DOMAIN=app.PLACEHOLDER_NAME.localhost
+      - API_DOMAIN=api.PLACEHOLDER_NAME.localhost
+      - BACKEND_SERVER_API=backend:3001
+      - STORAGE_SERVER_API=storage:3002
+    extra_hosts:
+      - "app.PLACEHOLDER_NAME.localhost:127.0.0.1"
+      - "api.PLACEHOLDER_NAME.localhost:127.0.0.1"
+    ports:
+      - "80:80"
+      - "443:443"
+  mongo:
+    volumes:
+      - mongodata:/data/db
+      - ./tools/01-mongo-init.js:/docker-entrypoint-initdb.d/01-mongo-init.js:ro
+    ports:
+      - "27017:27017"
+
+volumes:
+  mongodata:
+

@@ -1,0 +1,67 @@
+version: "3.3"
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
+      args:
+        BUILD_CONTEXT: control
+    environment:
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      SERVER_NAME: control
+      SERVER_PORT: 3001
+      MONGO_CONNECTION_STRING: ${MONGO_CONNECTION_STRING}
+      WEBAPP_URL: ${WEBAPP_URL}
+      JWT_SECRET_TOKEN: ${JWT_SECRET_TOKEN}
+    depends_on:
+      mongo:
+        condition: service_healthy
+  storage:
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
+      args:
+        BUILD_CONTEXT: storage
+    environment:
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      SERVER_NAME: storage
+      SERVER_PORT: 3002
+      MONGO_CONNECTION_STRING: ${MONGO_CONNECTION_STRING}
+      STORAGE_GCP_PROJECT_ID: ${STORAGE_GCP_PROJECT_ID}
+      STORAGE_GCP_PRIVATE_KEY_ID: ${STORAGE_GCP_PRIVATE_KEY_ID}
+      STORAGE_GCP_PRIVATE_KEY: ${STORAGE_GCP_PRIVATE_KEY}
+      STORAGE_GCP_CLIENT_EMAIL: ${STORAGE_GCP_CLIENT_EMAIL}
+      STORAGE_GCP_CLIENT_ID: ${STORAGE_GCP_CLIENT_ID}
+      STORAGE_BUCKET_NAME: ${STORAGE_BUCKET_NAME}
+      WEBAPP_URL: ${WEBAPP_URL}
+      JWT_SECRET_TOKEN: ${JWT_SECRET_TOKEN}
+    depends_on:
+      mongo:
+        condition: service_healthy
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+      args:
+        # Real envs
+        - REACT_APP_API_ENDPOINT=null
+        - REACT_APP_STORAGE_API_ENDPOINT=null
+        - REACT_APP_PRODUCTION=true
+        - REACT_APP_LOG_LEVEL=INFO
+        - REACT_APP_GTM_ID=null
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+  mongo:
+    image: mongo:7.0.1
+    restart: always
+    healthcheck:
+      test: ["CMD", "mongosh", "-u", "root", "-p", "example", "--authenticationDatabase", "admin", "--eval", "db.runCommand({ usersInfo: { user: 'control-msc-user', db: 'PLACEHOLDER_NAME_DB' } }).ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASS:-example}

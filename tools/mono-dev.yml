@@ -1,0 +1,40 @@
+name: mono-dev
+root: <%= ENV['PROJECT_DIR'] %>
+
+on_project_start:
+  - cd modules && ./build.sh
+
+windows:
+  - build:
+      layout: even-vertical
+      panes:
+        - |
+          docker compose -f docker-compose.yml -f docker-compose-local.yml up --build mongo
+  - control:
+      layout: even-vertical
+      panes:
+        - |
+          nvm use
+          cd microservices/control
+          yarn dev
+  - storage:
+      layout: even-vertical
+      panes:
+        - |
+          nvm use
+          cd microservices/storage
+          yarn dev
+  - frontend:
+      layout: even-vertical
+      panes:
+        - |
+          nvm use
+          cd frontend
+          yarn dev
+  - watch-build:
+      layout: even-vertical
+      panes:
+        - |
+          nvm use
+          cd modules
+          ./build-watch.sh

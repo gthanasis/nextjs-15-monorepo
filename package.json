@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "microservices/*",
+      "modules/*",
+      "tools/*",
+      "frontend"
+    ]
+  },
+  "scripts": {
+    "dev": "PROJECT_DIR=$(pwd) TMUXINATOR_CONFIG=./tools tmuxinator mono-dev",
+    "build:modules": "cd modules && ./build.sh",
+    "build:control": "docker build -t control --build-arg BUILD_CONTEXT=control .",
+    "run:control": "docker run -p 3001:3001 --name node-mcs_control control",
+    "build:storage": "docker build -t storage --build-arg BUILD_CONTEXT=storage .",
+    "run:storage": "docker run -p 3002:3002 --name node-mcs_storage storage",
+    "clean:nodemodules": "rm -rf node_modules && rm -rf **/node_modules && rm -rf **/**/node_modules",
+    "pree2e:run": "docker compose -f docker-compose.yml -f docker-compose-test.yml down && docker volume rm PLACEHOLDER_NAME_DB_mongotestdata || true",
+    "e2e:run": "docker compose -f docker-compose.yml -f docker-compose-test.yml up --build --exit-code-from cypress",
+    "detach": "./tools/detach.sh"
+  },
+  "dependencies": {},
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
+}

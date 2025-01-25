@@ -1,0 +1,29 @@
+{
+  "name": "middlewares",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc --build",
+    "test:watch": "mocha -r ts-node/register --extension js,ts --recursive -w -b ./tests/",
+    "test": "TS_NODE_PROJECT='./tests/tsconfig.json' mocha -r ts-node/register --extension js,ts --recursive --exit ./tests/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/chai": "^5.0.0",
+    "@types/mocha": "^10.0.9"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "microservice": "*",
+    "logger": "*",
+    "library": "*",
+    "ajv": "8.17.1",
+    "chai": "^4.3.6",
+    "mocha": "^10.7.3",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
