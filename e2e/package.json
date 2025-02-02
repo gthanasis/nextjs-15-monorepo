@@ -4,8 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "precypress:open": "node set-local-ip.js",
-    "cypress:open": "source ./test.sh && cypress open"
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "cypress": "12.17.0"

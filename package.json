@@ -9,8 +9,9 @@
     ]
   },
   "scripts": {
-    "predev": "docker compose -f docker-compose.yml -f docker-compose-local.yml up --build mongo -d",
+    "predev": "docker compose --env-file ./envs/.env.local.native -f docker-compose.yml -f docker-compose-internal.yml up --build --no-deps mongo nginx -d",
     "dev": "turbo dev",
+    "start:docker": "docker compose --env-file ./envs/.env.local.native --env-file ./envs/.env.local.docker -f docker-compose.yml up --build",
     "clean:nodemodules": "rm -rf node_modules && rm -rf **/node_modules && rm -rf **/**/node_modules",
     "pree2e:run": "docker compose -f docker-compose.yml -f docker-compose-test.yml down && docker volume rm PLACEHOLDER_NAME_DB_mongotestdata || true",
     "e2e:run": "docker compose -f docker-compose.yml -f docker-compose-test.yml up --build --exit-code-from cypress",

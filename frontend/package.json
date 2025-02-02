@@ -1,5 +1,5 @@
 {
-  "name": "PLACHOLDER_NAME",
+  "name": "frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -19,9 +19,10 @@
     "clsx": "^2.1.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "jose": "^5.9.6",
     "lucide-react": "^0.471.0",
     "next": "15.1.2",
-    "next-auth": "^4.24.11",
+    "next-auth": "^5.0.0-beta.25",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^2.6.0",

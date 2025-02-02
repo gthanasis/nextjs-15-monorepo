@@ -1,6 +1,5 @@
-version: "3.3"
 services:
-  backend:
+  control:
     build:
       context: .
       dockerfile: backend.Dockerfile
@@ -43,17 +42,24 @@ services:
       context: .
       dockerfile: frontend.Dockerfile
       args:
-        # Real envs
-        - REACT_APP_API_ENDPOINT=null
-        - REACT_APP_STORAGE_API_ENDPOINT=null
-        - REACT_APP_PRODUCTION=true
-        - REACT_APP_LOG_LEVEL=INFO
-        - REACT_APP_GTM_ID=null
+        - NEXT_PUBLIC_BACKEND_URL=${BACKEND_DOMAIN}
+        - NEXT_PUBLIC_LOG_LEVEL=${LOG_LEVEL:-INFO}
+        - NEXT_PUBLIC_GTM_ID=${GTM_ID}
+        - NEXT_PUBLIC_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+        - NEXT_PUBLIC_VAPID_PUBLIC_KEY=${VAPID_PUBLIC}
+    environment:
+      BACKEND_SERVER_API: ${BACKEND_HOST}:3001
+      STORAGE_SERVER_API: ${STORAGE_HOST}:3002
+      AUTH_URL: ${AUTH_URL}
+      AUTH_SECRET: ${AUTH_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GOOGLE_LOGIN_REDIRECT_URI: ${GOOGLE_LOGIN_REDIRECT_URI}
+      NEXT_TOKEN: ${NEXT_TOKEN}
     ports:
-      - "80:80"
-      - "443:443"
+      - "3000:3000"
     depends_on:
-      - backend
+      - control
   mongo:
     image: mongo:7.0.1
     restart: always
@@ -65,3 +71,24 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME:-root}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASS:-example}
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx-proxy
+    build:
+        context: ./nginx
+        dockerfile: Dockerfile
+    environment:
+      FRONTEND_HOST: ${FRONTEND_HOST}
+      CONTROL_HOST: ${CONTROL_HOST}
+      STORAGE_HOST: ${STORAGE_HOST}
+      DOMAIN: ${DOMAIN}
+      API_DOMAIN: ${API_DOMAIN}
+    ports:
+      - "80:80"
+    depends_on:
+      - control
+      - storage
+      - frontend
+    volumes:
+      - ./nginx/templates:/etc/nginx/templates

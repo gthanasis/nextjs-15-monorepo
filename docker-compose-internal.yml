@@ -1,0 +1,11 @@
+services:
+  mongo:
+    volumes:
+      - mongodata:/data/db
+      - ./tools/01-mongo-init.js:/docker-entrypoint-initdb.d/01-mongo-init.js:ro
+    ports:
+      - "27017:27017"
+
+volumes:
+  mongodata:
+

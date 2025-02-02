@@ -1,55 +1,57 @@
-FROM node:20-alpine
+# Base stage
+FROM node:20-alpine AS base
 
-RUN apk update && apk add --no-cache openssl
+RUN apk update && apk add --no-cache libc6-compat
 
+# Define arguments for build context
 ARG BUILD_CONTEXT
-ENV WORKSPACE $BUILD_CONTEXT
+ENV WORKSPACE=$BUILD_CONTEXT
 
-WORKDIR /microservices
+# Set working directory
+WORKDIR /app
 
-# Copy yarn workspaces stuff
-COPY package.json .
-COPY yarn.lock .
+# Install Turbo globally
+RUN yarn global add turbo@^2
 
-COPY .yarnrc .
-COPY .yarn ./.yarn
+# Builder stage
+FROM base AS builder
 
-# Copy the current build context's package.json
-COPY ./microservices/$BUILD_CONTEXT/package.json microservices/$BUILD_CONTEXT/package.json
+WORKDIR /app
 
-# Copy the modules
-COPY ./modules modules
+# Copy the repository files
+COPY . .
 
-## Install dependencies
-RUN yarn --frozen-lockfile
+# Generate a partial monorepo with a pruned lockfile for the target workspace
+RUN turbo prune --scope=$WORKSPACE --docker
 
-# Use a different directory for the node_modules
-ENV NODE_MODULES_CACHE=/usr/src/cache/node_modules
-RUN mkdir -p $NODE_MODULES_CACHE
+# Installer stage
+FROM base AS installer
 
-# Use the cache for the node_modules
-RUN ln -s $NODE_MODULES_CACHE node_modules
+WORKDIR /app
 
-# copy envs
-#COPY microservices/control/.env envs/.env
+# Copy pruned workspace files
+COPY --from=builder /app/out/json/ .
 
-# Copy the current build context
-COPY ./microservices/$BUILD_CONTEXT microservices/$BUILD_CONTEXT
+# Install dependencies for the workspace
+RUN yarn install --frozen-lockfile
 
-# Install dependencies
-RUN yarn workspace logger build
-RUN yarn workspace library build
-RUN yarn workspace microservice build
-RUN yarn workspace middlewares build
+# Copy the full workspace for build
+COPY --from=builder /app/out/full/ .
 
-# Run build for the current workspace
-RUN yarn workspace $BUILD_CONTEXT build
+# Build the target workspace
+RUN yarn turbo run build --filter=$WORKSPACE...
 
-# Clean up image
-RUN rm -rf microservices/$BUILD_CONTEXT/src
-RUN rm -rf microservices/$BUILD_CONTEXT/.eslintrc.json
-RUN rm -rf microservices/$BUILD_CONTEXT/tsconfig.json
+# Runner stage
+FROM base AS runner
 
-# Expose the port and start the server
-EXPOSE 80
-CMD yarn workspace ${WORKSPACE} start
+WORKDIR /app
+
+# Create a non-root user for running the application
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 $WORKSPACE
+USER $WORKSPACE
+
+COPY --from=installer --chown=$WORKSPACE:nodejs /app ./app
+
+# Define the default command
+CMD sh -c "node app/microservices/${WORKSPACE}/dist/index.js"
