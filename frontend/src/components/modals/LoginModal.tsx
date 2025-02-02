@@ -3,14 +3,13 @@ import { LoginForm } from '@/components/forms/LoginForm'
 
 type Props = {
   trigger: React.ReactNode
-  onTrigger?: () => void
 }
 
 export default function LoginModal(props: Props) {
-  const { trigger, onTrigger } = props
+  const { trigger } = props
   return (
     <Modal trigger={trigger}>
-      <LoginForm onClick={onTrigger} />
+      <LoginForm />
     </Modal>
   )
 }

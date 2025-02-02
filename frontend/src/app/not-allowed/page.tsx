@@ -9,7 +9,7 @@ export default function NotAllowed() {
           Please return to the homepage or log in with the appropriate credentials to continue.
         </p>
         <Link
-          href="/user-form"
+          href="/"
           className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
         >
           Go to Home

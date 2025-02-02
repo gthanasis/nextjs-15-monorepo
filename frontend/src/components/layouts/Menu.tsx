@@ -1,60 +1,9 @@
-'use client'
-import { signIn, useSession, signOut } from 'next-auth/react'
-import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { auth } from '@/auth'
 import React from 'react'
-import useGoogleOneTap from '@/hooks/useOneTapSignIn'
-import LoginModal from '@/components/modals/LoginModal'
-import Image from 'next/image'
+import MenuAvatar from '@/components/layouts/MenuAvatar'
 
-export default function Menu() {
-  const { data } = useSession()
-  const { user } = data || {}
-  useGoogleOneTap({
-    clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
-    onSuccess: async (credential) => {
-      await signIn('credentials', { idToken: credential, redirect: false })
-    },
-    onError: (error) => {
-      console.log('OneTap error:', error)
-    },
-    autoSelect: false,
-  })
-  const logOut = () => {
-    signOut()
-  }
-
-  const userAvatarMenu = (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <div className="flex items-center justify-center">
-          <Image
-            className="h-8 w-8 rounded-full object-cover"
-            src={user?.image || 'https://via.placeholder.com/150'}
-            alt=""
-          />
-        </div>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuLabel>{user?.name}</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>Settings</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={logOut}>
-          Log out
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
+export default async function Menu() {
+  const session = await auth()
   return (
     <>
       <header className="bg-white shadow">
@@ -66,7 +15,7 @@ export default function Menu() {
               </div>
             </div>
             <div className="flex items-center">
-              {user ? userAvatarMenu : <LoginModal trigger={<Button>Login</Button>} />}
+              <MenuAvatar session={session} />
             </div>
           </div>
         </nav>

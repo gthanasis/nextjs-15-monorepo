@@ -1,5 +1,3 @@
-'use client'
-
 import Menu from '@/components/layouts/Menu'
 
 export default function Page() {
