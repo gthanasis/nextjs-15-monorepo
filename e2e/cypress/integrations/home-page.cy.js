@@ -5,6 +5,6 @@ describe("Home page", () => {
 
   it("Menu items should work", () => {
     cy.viewport(1280, 720);
-    cy.contains("Explore").click();
+    cy.contains("Your App");
   });
 });

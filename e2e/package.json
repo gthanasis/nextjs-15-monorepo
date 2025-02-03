@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "cypress:open": "cypress open"
+    "cypress:open": "CYPRESS_BASE_URL=http://localhost cypress open"
   },
   "dependencies": {
     "cypress": "12.17.0"

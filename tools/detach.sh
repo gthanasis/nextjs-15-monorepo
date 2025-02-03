@@ -95,3 +95,6 @@ if $DRY_RUN; then
 else
     echo "Replacement complete."
 fi
+
+# Add a notice here if you rename the folder that this is in then we need to change this
+# nextjs-15-monorepo_mongotestdata -> ${folder name}_mongotestdata
