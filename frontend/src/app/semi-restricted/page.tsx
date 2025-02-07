@@ -1,0 +1,9 @@
+import Authenticated from '@/guards/authenticated'
+
+export default async function SemiRestrictedPage() {
+  return (
+    <div className="px-4 py-6 sm:px-6 lg:px-8">
+      <h1 className="text-3xl font-bold">Semi restricted page</h1>
+    </div>
+  )
+}

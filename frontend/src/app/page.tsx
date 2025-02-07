@@ -1,15 +1,12 @@
-import Menu from '@/components/layouts/Menu'
+import { DashBoardLayout } from '@/components/layouts/dashboard/DashBoardLayout'
 
 export default function Page() {
   return (
-    <div className="min-h-screen">
-      <Menu />
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <h1 className="text-3xl font-bold">Welcome to Your App</h1>
-          <p className="mt-4">This is your public landing page.</p>
-        </div>
-      </main>
-    </div>
+    <DashBoardLayout>
+      <div className="px-4 py-6">
+        <h1 className="text-3xl font-bold">Welcome to Your App</h1>
+        <p className="mt-4">This is your public landing page.</p>
+      </div>
+    </DashBoardLayout>
   )
 }
