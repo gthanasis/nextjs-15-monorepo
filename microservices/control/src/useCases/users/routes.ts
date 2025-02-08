@@ -13,9 +13,9 @@ export default (msc: ControlMsc): Router => {
     const controller = new UserController({ service, logger })
 
     router.post(
-        '/users/google',
+        '/users/:provider',
         auth({ jtwLib, roles: ['next'], logger }),
-        AsyncErrorHandler(controller.createFromGoogle.bind(controller))
+        AsyncErrorHandler(controller.createFromProvider.bind(controller))
     )
 
     // regular user

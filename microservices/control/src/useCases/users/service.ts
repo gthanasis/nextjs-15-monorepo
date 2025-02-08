@@ -1,7 +1,7 @@
 import { UserRepository } from "./repository";
 import { User, validateLocation } from "./model";
 import { BunyanLogger } from "logger";
-import { GeoPoint, IUser } from "api-client";
+import {CreateUserDto, GeoPoint, IUser} from "api-client";
 import { BadRequestError } from "library";
 import { RetrieveWithFilterProps } from "../../types/common";
 
@@ -49,7 +49,7 @@ export class UserService {
     });
   }
 
-  async createFromGoogle(user: any) {
+  async createFromProvider(user: Partial<CreateUserDto> & { id: string }, provider: string, role: 'user') {
     const userExists = await this.repository.retrieveWithFilter({
       query: { email: user.email },
       order: { direction: null, order: null },
@@ -57,9 +57,31 @@ export class UserService {
       search: null,
     });
     if (userExists.users.length > 0) {
+      const existingUser = userExists.users[0];
+      // User already exists, log them in
+      this.logger.debug(
+        `Found user ${existingUser.id} with role ${existingUser.role} on ${provider} login, logging them in.`,
+      );
+      this.logger.trace({ existingUser });
       return userExists.users[0];
     } else {
-      // return await this.insert({});
+      // User doesn't exist, create a new account
+      this.logger.debug(
+        `Did not found user with ${provider} login, creating the user and logging them in.`,
+      );
+      const newUser = await this.insert({
+        name: user.name,
+        email: user.email,
+        profileImage: user.profileImage,
+        social: {
+          [provider]: { id: user.id },
+        },
+        settings: {},
+        role: role,
+        publicProfile: false,
+      });
+      this.logger.trace({ newUser });
+      return newUser;
     }
   }
 

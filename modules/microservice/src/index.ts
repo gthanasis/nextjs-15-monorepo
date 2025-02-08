@@ -138,9 +138,9 @@ class AbstractService {
    * Starts the service
    */
   async start(): Promise<void> {
-    this.app.use(this.router);
     await this.listen(this.port, this.host);
-    this.app.use("/", this.ping);
+    this.app.get("/", this.ping);
+    this.app.use(this.router);
     this.app.use(this.errorBoundary);
     try {
       await this.createConnections();

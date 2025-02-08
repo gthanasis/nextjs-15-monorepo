@@ -42,7 +42,7 @@ export class UsersClient {
   }
 
   async createFromGoogle(
-    user: CreateUserDto,
+    user: Partial<CreateUserDto> & { id: string },
   ): Promise<ApiResponse<IUserPublicProfile>> {
     const res = await this.client.post<ApiResponse<IUserPublicProfile>>(
       "/users/google",

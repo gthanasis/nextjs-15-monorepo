@@ -56,32 +56,6 @@ export class AuthController {
     }
   }
 
-  async loginGoogleOneTouch(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
-    try {
-      const result = await this.service.loginGoogleOneTouch(
-        req.query.code as string,
-      );
-      res
-        .cookie("auth-token", result.token, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          expires: result.expiry,
-        })
-        .status(200)
-        .json({ success: true });
-    } catch (error: any) {
-      this.logger.error(
-        { error },
-        `Error handling Google callback ${error?.message} for code ${req.query.code}`,
-      );
-      res.status(500).json({ success: false });
-    }
-  }
-
   async loginDemo(
     req: Request,
     res: Response,

@@ -84,26 +84,10 @@ export class AuthService {
     return { id, email, given_name, family_name, picture };
   }
 
-  async loginGoogleOneTouch(code: string) {
-    this.logger.debug(`Authenticating user with Google`, {
-      audience: process.env.GOOGLE_LOGIN_CLIENTID,
-    });
-    const ticket = await this.client.verifyIdToken({
-      idToken: code,
-      audience: process.env.GOOGLE_LOGIN_CLIENTID, // Ensure the token is for your app
-    });
-
-    const payload = ticket.getPayload(); // Contains user info
-    const userId = payload?.sub; // Unique Google user ID
-
-    const { token, expiry } = await this.loginUser({ email: payload?.email });
-    return { token, expiry };
-  }
-
   /**
    * Logs the user in by creating or finding their account in the database
    */
-  async loginUser(user: any) {
+  async loginUser(user: { email: string, given_name: string, family_name: string, picture: string, id: string }) {
     this.logger.debug(`Logging user in`);
     // Check if the user already exists in the database
     const response = await this.userService.retrieve({

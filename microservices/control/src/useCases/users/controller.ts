@@ -21,9 +21,10 @@ export class UserController {
         }
     }
 
-    async createFromGoogle(req: Request, res: Response, next: NextFunction): Promise<void> {
+    async createFromProvider(req: Request, res: Response, next: NextFunction): Promise<void> {
         const { user } = req.body
-        const result = await this.service.createFromGoogle(user)
+        const { provider } = req.params
+        const result = await this.service.createFromProvider(user, provider, 'user')
         res.json({ res: result })
         next()
     }

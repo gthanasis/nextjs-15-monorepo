@@ -20,11 +20,6 @@ export default (msc: ControlMsc): Router => {
         AsyncErrorHandler(controller.loginGoogleCallback.bind(controller))
     )
 
-    router.get(
-        '/auth/login/google/onetouch',
-        AsyncErrorHandler(controller.loginGoogleOneTouch.bind(controller))
-    )
-
     if (process.env.ALLOW_DEMO_LOGIN) {
         router.get(
             '/auth/login/demo',
