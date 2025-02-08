@@ -28,7 +28,8 @@
     "react-dom": "^19.0.0",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
-    "web-push": "^3.6.7"
+    "web-push": "^3.6.7",
+    "api-client": "*"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

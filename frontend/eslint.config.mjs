@@ -17,6 +17,7 @@ const eslintConfig = [
         'warn',
         { ignoreRestArgs: false }, // Ensures even rest args are checked
       ],
+      '@typescript-eslint/no-unused-vars': 'warn',
     },
   },
 ]
