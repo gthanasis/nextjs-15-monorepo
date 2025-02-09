@@ -1,9 +1,9 @@
-import { UserRepository } from "./repository";
-import { User, validateLocation } from "./model";
 import { BunyanLogger } from "logger";
 import {CreateUserDto, GeoPoint, IUser} from "api-client";
 import { BadRequestError } from "library";
-import { RetrieveWithFilterProps } from "../../types/common";
+import {UserRepository} from '../repositories/repository'
+import {RetrieveWithFilterProps} from '../../../types/common'
+import {User, validateLocation} from '../models/model'
 
 export class UserService {
   private repository: UserRepository;

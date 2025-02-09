@@ -1,72 +1,77 @@
-import { assert } from 'chai'
-import { BadRequestError } from 'library'
-import bodyValidator from '../../src/bodyValidator'
-import {stub} from 'sinon'
+// tests/middleware/bodyValidator.spec.ts
 
-describe('bodyValidator Middleware', () => {
-    it('should call next() when the request body is valid', async () => {
-        const schema = {
-            type: 'object',
-            properties: {
-                name: { type: 'string' },
-                age: { type: 'number' }
-            },
-            required: ['name', 'age']
-        }
+import { describe, it, expect } from "vitest";
+import { BadRequestError } from "library";
+import { bodyValidator } from "../../src";
+import { stub } from "sinon";
 
-        const req = { body: { name: 'Alice', age: 30 } } as any
-        const res = {} as any
-        const next = stub()
+describe("bodyValidator Middleware", () => {
+  it("should call next() when the request body is valid", async () => {
+    const schema = {
+      type: "object",
+      properties: {
+        name: { type: "string" },
+        age: { type: "number" },
+      },
+      required: ["name", "age"],
+    };
 
-        const middleware = bodyValidator(schema)
-        await middleware(req, res, next)
+    const req = { body: { name: "Alice", age: 30 } } as any;
+    const res = {} as any;
+    const next = stub();
 
-        assert.isTrue(next.calledOnce)
-        assert.isTrue(next.firstCall.args.length === 0) // No arguments passed to next() on success
-    })
+    const middleware = bodyValidator(schema);
+    await middleware(req, res, next);
 
-    it('should call next() with BadRequestError when the request body is invalid', async () => {
-        const schema = {
-            type: 'object',
-            properties: {
-                name: { type: 'string' },
-                age: { type: 'number' }
-            },
-            required: ['name', 'age']
-        }
+    expect(next.calledOnce).toBe(true);
+    // No arguments passed to next() on success
+    expect(next.firstCall.args.length).toBe(0);
+  });
 
-        const req = { body: { name: 'Alice' } } as any // Missing required field 'age'
-        const res = {} as any
-        const next = stub()
+  it("should call next() with BadRequestError when the request body is invalid", async () => {
+    const schema = {
+      type: "object",
+      properties: {
+        name: { type: "string" },
+        age: { type: "number" },
+      },
+      required: ["name", "age"],
+    };
 
-        const middleware = bodyValidator(schema)
-        await middleware(req, res, next)
+    // Missing required field 'age'
+    const req = { body: { name: "Alice" } } as any;
+    const res = {} as any;
+    const next = stub();
 
-        assert.isTrue(next.calledOnce)
-        const error = next.firstCall.args[0]
-        assert.instanceOf(error, BadRequestError)
-        assert.match(error.message, /Bad Request/) // Check error message format
-    })
+    const middleware = bodyValidator(schema);
+    await middleware(req, res, next);
 
-    it('should handle schema validation errors correctly', async () => {
-        const schema = {
-            type: 'object',
-            properties: {
-                name: { type: 'string' }
-            },
-            required: ['name']
-        }
+    expect(next.calledOnce).toBe(true);
+    const error = next.firstCall.args[0];
+    expect(error).toBeInstanceOf(BadRequestError);
+    expect(error.message).toMatch(/Bad Request/);
+  });
 
-        const req = { body: {} } as any // Completely invalid body
-        const res = {} as any
-        const next = stub()
+  it("should handle schema validation errors correctly", async () => {
+    const schema = {
+      type: "object",
+      properties: {
+        name: { type: "string" },
+      },
+      required: ["name"],
+    };
 
-        const middleware = bodyValidator(schema)
-        await middleware(req, res, next)
+    // Completely invalid body
+    const req = { body: {} } as any;
+    const res = {} as any;
+    const next = stub();
 
-        assert.isTrue(next.calledOnce)
-        const error = next.firstCall.args[0]
-        assert.instanceOf(error, BadRequestError)
-        assert.match(error.message, /Bad Request/)
-    })
-})
+    const middleware = bodyValidator(schema);
+    await middleware(req, res, next);
+
+    expect(next.calledOnce).toBe(true);
+    const error = next.firstCall.args[0];
+    expect(error).toBeInstanceOf(BadRequestError);
+    expect(error.message).toMatch(/Bad Request/);
+  });
+});

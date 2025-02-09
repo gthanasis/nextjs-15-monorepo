@@ -11,8 +11,9 @@
     "lint": "eslint",
     "start": "node dist/index.js",
     "dev": "tsx watch src/index.ts --tsconfig tsconfig.build.json",
-    "test:watch": "TS_NODE_PROJECT='./tsconfig.tests.json' mocha -r source-map-support/register -r ts-node/register --extension ts --recursive -w -b tests",
-    "test": "TS_NODE_PROJECT='./tsconfig.tests.json' mocha -r ts-node/register --extension ts --recursive --exit tests",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest --watch",
     "migrate:create": "db-migrate create migration-name --config dbfile.js -e default",
     "migrate:up": "db-migrate up --config dbfile.js dbfile.js -e default",
     "migrate:down": "db-migrate down --config dbfile.js dbfile.js -e default",
@@ -35,7 +36,10 @@
   "devDependencies": {
     "@types/googlemaps": "^3.43.3",
     "@types/sinon": "^17.0.3",
+    "@vitest/coverage-c8": "^0.33.0",
     "eslint": "^8.56.0",
-    "eslint-config-custom": "*"
+    "eslint-config-custom": "*",
+    "sinon": "^19.0.2",
+    "vitest": "^3.0.5"
   }
 }

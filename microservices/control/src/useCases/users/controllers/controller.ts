@@ -1,7 +1,7 @@
 import { ApiResponse, IUserPublicProfile } from 'api-client'
-import { UserService } from './service'
 import { BunyanLogger } from 'logger'
 import { NextFunction, Response, Request } from 'microservice'
+import {UserService} from '../services/service'
 
 type UserControllerProps = {
     service: UserService

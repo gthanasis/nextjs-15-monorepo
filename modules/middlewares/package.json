@@ -6,26 +6,27 @@
   "scripts": {
     "build": "tsc --build",
     "dev": "tsc -w",
-    "test:watch": "mocha -r ts-node/register --extension js,ts --recursive -w -b ./tests/",
-    "test": "TS_NODE_PROJECT='./tests/tsconfig.json' mocha -r ts-node/register --extension js,ts --recursive --exit ./tests/",
+    "test": "vitest run",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest run --coverage",
     "check-types": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/jsonwebtoken": "^9.0.7",
     "@types/chai": "^5.0.0",
-    "@types/mocha": "^10.0.9"
+    "@types/jsonwebtoken": "^9.0.7",
+    "@vitest/coverage-v8": "3.0.5"
   },
   "dependencies": {
-    "cookie-parser": "^1.4.7",
-    "microservice": "*",
-    "logger": "*",
-    "library": "*",
     "ajv": "8.17.1",
     "chai": "^4.3.6",
-    "mocha": "^10.7.3",
-    "jsonwebtoken": "^9.0.2"
+    "cookie-parser": "^1.4.7",
+    "jsonwebtoken": "^9.0.2",
+    "library": "*",
+    "logger": "*",
+    "microservice": "*",
+    "zod": "^3.24.1"
   }
 }

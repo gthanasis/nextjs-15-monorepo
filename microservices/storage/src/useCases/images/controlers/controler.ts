@@ -1,4 +1,4 @@
-import { ImagesService } from './service'
+import { ImagesService } from '../services/service'
 import { BunyanLogger } from 'logger'
 import {BadRequestError} from 'library'
 import {NextFunction, Response, Request} from 'microservice'

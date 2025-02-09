@@ -1,8 +1,8 @@
-import { ControlMsc } from '../../service'
-import { UserController } from './controller'
 import { AsyncErrorHandler, Router } from 'microservice'
-import { generateUsersService } from './index'
-import { auth, paginationOrderingQueryParams } from 'middlewares'
+import {auth, paginationOrderingQueryParams, zodBodyValidator} from 'middlewares'
+import {ControlMsc} from '../../../service'
+import {generateUsersService} from '../index'
+import {UserController} from '../controllers/controller'
 const router = Router()
 
 export default (msc: ControlMsc): Router => {

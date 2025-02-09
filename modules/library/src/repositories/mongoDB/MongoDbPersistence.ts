@@ -232,12 +232,16 @@ export class MongoDbPersistence implements IPersistence {
     await this.client.close();
   }
 
-  async close(err: Error): Promise<void> {
-    if (!(err instanceof MongoNetworkError))
+  async close(err: Error, timeout = 5000): Promise<void> {
+    if (!(err instanceof MongoNetworkError)) {
       return console.warn(
         `⛁ MongoDB database connection closed. Connection Id: ${this.id}`,
       );
-    if (!this.connecting) setTimeout(() => this.connect.apply(this), 5000);
+    }
+
+    if (!this.connecting) {
+      setTimeout(this.connect.bind(this), timeout); // Use `bind(this)`
+    }
   }
 
   resolveId<Type>(obj): Type {

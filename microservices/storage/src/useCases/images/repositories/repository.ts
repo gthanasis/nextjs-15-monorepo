@@ -1,7 +1,7 @@
 import { IImage } from 'api-client'
 import { BunyanLogger } from 'logger'
 import { Storage, StorageOptions } from '@google-cloud/storage'
-import {DeleteImageDTO, InsertImageDTO, RetrieveByIdDTO} from './types'
+import {DeleteImageDTO, InsertImageDTO, RetrieveByIdDTO} from '../types'
 
 export class ImagesRepository {
     private logger: BunyanLogger

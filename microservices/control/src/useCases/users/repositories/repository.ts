@@ -1,7 +1,7 @@
 import {IUser as UserModel, IUserPublicProfile, WithLodashID} from 'api-client'
 import {BunyanLogger} from 'logger'
 import {MongoDbPersistence, MongoQueryOptions, ObjectID} from 'library'
-import {RetrieveWithFilterProps} from '../../types/common'
+import {RetrieveWithFilterProps} from '../../../types/common'
 
 type IUser = WithLodashID<UserModel>
 

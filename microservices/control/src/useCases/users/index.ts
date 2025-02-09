@@ -1,6 +1,6 @@
 import {ControlMsc} from '../../service'
-import {UserService} from './service'
-import {UserRepository} from './repository'
+import {UserRepository} from './repositories/repository'
+import {UserService} from './services/service'
 
 export const generateUsersService = (msc: ControlMsc) => {
     const { persistence, logger } = msc

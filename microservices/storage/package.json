@@ -11,8 +11,9 @@
     "lint": "eslint",
     "start": "node dist/index.js",
     "dev": "tsx watch src/index.ts --tsconfig tsconfig.build.json",
-    "test:watch": "TS_NODE_PROJECT='./tsconfig.tests.json' mocha -r source-map-support/register -r ts-node/register --extension ts --recursive -w -b tests",
-    "test": "TS_NODE_PROJECT='./tsconfig.tests.json' mocha -r ts-node/register --extension ts --recursive --exit tests",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest --watch",
     "check-types": "tsc --noEmit -p tsconfig.build.json"
   },
   "dependencies": {
@@ -36,6 +37,8 @@
     "@types/multer": "^1.4.12",
     "@types/sinon": "^17.0.3",
     "eslint": "^8.56.0",
-    "eslint-config-custom": "*"
+    "eslint-config-custom": "*",
+    "sinon": "^19.0.2",
+    "vitest": "^3.0.5"
   }
 }

@@ -1,10 +1,10 @@
-import { ImagesRepository } from './repository'
 import { BunyanLogger } from 'logger'
 import { IImage } from 'api-client'
 import sharp from 'sharp'
 import fileType from 'file-type'
-import {InsertImageDTO, DeleteImageDTO, RetrieveByIdDTO, FileImageTypes} from './types'
 import {BadRequestError} from 'library'
+import { ImagesRepository } from '../repositories/repository'
+import {DeleteImageDTO, FileImageTypes, InsertImageDTO, RetrieveByIdDTO} from '../types'
 
 export class ImagesService {
     private repository: ImagesRepository

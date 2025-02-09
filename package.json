@@ -11,6 +11,7 @@
   "scripts": {
     "predev": "docker compose --env-file ./envs/.env.local.native -f docker-compose.yml -f docker-compose-internal.yml up --build --no-deps mongo nginx -d",
     "dev": "turbo dev",
+    "test": "turbo test",
     "start:docker": "docker compose --env-file ./envs/.env.local.native --env-file ./envs/.env.local.docker -f docker-compose.yml up --build",
     "clean:nodemodules": "rm -rf node_modules && rm -rf **/node_modules && rm -rf **/**/node_modules",
     "pree2e:run": "docker compose -f docker-compose.yml -f docker-compose-test.yml down && docker volume rm nextjs-15-monorepo_mongotestdata || true",
