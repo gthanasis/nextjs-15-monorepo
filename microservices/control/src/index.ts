@@ -3,7 +3,7 @@ import 'source-map-support/register'
 import dotenv from 'dotenv'
 import { Logger, BunyanLogger, LogLevel } from 'logger'
 import auth from './useCases/auth/routes'
-import users from './useCases/users/routes'
+import users from './useCases/users/routes/routes'
 import geo from './useCases/geo/routes'
 
 // dotenv.config({ path: '../../envs/.env' })

@@ -1,6 +1,6 @@
 import { auth } from '@/auth'
 import React from 'react'
-import Logo from '@/components/Logo'
+import Logo from '@/components/Logo/Logo'
 import NavLink from '@/components/layouts/dashboard/NavLink'
 import MenuAvatar from '@/components/layouts/dashboard/MenuAvatar'
 

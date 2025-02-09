@@ -1,6 +1,6 @@
-import {ImagesService} from './service'
+import {ImagesService} from './services/service'
 import {StorageMsc} from '../../service'
-import {ImagesRepository} from './repository'
+import {ImagesRepository} from './repositories/repository'
 
 export const generateImagesService = (msc: StorageMsc) => {
     const { logger } = msc

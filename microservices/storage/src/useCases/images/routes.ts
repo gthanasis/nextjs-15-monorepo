@@ -1,10 +1,10 @@
 import {StorageMsc} from '../../service'
 import {AsyncErrorHandler, RequestHandler, Router} from 'microservice'
-import {ImagesController} from './controler'
 import {generateImagesService} from './index'
-import ImageJsonSchema from './model'
 import multer from 'multer'
 import {auth, bodyValidator} from 'middlewares'
+import {ImagesController} from './controlers/controler'
+import ImageJsonSchema from './models/model'
 const router = Router()
 
 const uploadMiddleware: RequestHandler = (req, res, next) => {

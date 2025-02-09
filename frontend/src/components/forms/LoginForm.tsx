@@ -1,6 +1,6 @@
 'use client'
 import { cn } from '@/lib/utils'
-import useGoogleOneTap from '@/hooks/useOneTapSignIn'
+import useGoogleOneTap from '@/hooks/useGoogleOneTap'
 import { useEffect, useRef } from 'react'
 import { signIn } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
