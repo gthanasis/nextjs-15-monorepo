@@ -1,11 +1,11 @@
-name: E2E Test Workflow
+name: End to End tests
 on:
   pull_request:
     branches: [ "main" ]
     paths: [
         "microservices/control/**",
         "microservices/storage/**",
-        "frontend_new/**",
+        "frontend/**",
         ".github/**",
         "nginx/**"
     ]
