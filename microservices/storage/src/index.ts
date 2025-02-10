@@ -28,4 +28,5 @@ const msc = new StorageMsc(
 )
 
 msc.addRouter(imagesRouteGenerator(msc))
+// Start the service
 msc.start()

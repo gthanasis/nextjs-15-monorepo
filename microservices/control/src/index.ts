@@ -30,4 +30,5 @@ const msc = new ControlMsc({
 msc.addRouter(auth(msc))
 msc.addRouter(users(msc))
 msc.addRouter(geo(msc))
+// Start the service
 msc.start()
