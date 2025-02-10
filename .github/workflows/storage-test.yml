@@ -6,7 +6,7 @@ on:
   workflow_call:
 
 jobs:
-  test-control-msc:
+  test-storage-msc:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
