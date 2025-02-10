@@ -1,0 +1,31 @@
+name: Build and Test Library
+
+on:
+  pull_request:
+    branches: [ "main" ]
+    paths: [ "modules/**", ".github/**" ]
+  workflow_call:
+
+jobs:
+  build-and-test-lib:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3  # Updated to the latest version
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3  # Updated to the latest version
+        with:
+          node-version: 20
+          cache: 'yarn'  # Added cache for Yarn
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+        working-directory: .  # Specifying working-directory is redundant here, can be removed if the whole repo needs dependencies
+
+      - name: Build lib and deps
+        run: yarn turbo run build --filter='!control' --filter='!storage' --filter='!frontend'
+
+      - name: Test library
+        run: yarn test --filter='!control' --filter='!storage' --filter='!frontend'

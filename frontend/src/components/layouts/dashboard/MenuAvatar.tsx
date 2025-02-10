@@ -13,6 +13,7 @@ type Props = {
 export default function MenuAvatar(props: Props) {
   const { session } = props
   const { data } = useSession()
+  console.log(JSON.stringify(data, null, 2))
   const user = data?.user || session?.user
 
   return <>{user ? <UserDropdownMenu /> : <LoginModal trigger={<Button>Login</Button>} />}</>

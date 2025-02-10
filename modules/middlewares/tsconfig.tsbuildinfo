@@ -1,1 +1,1 @@
-{"root":["./src/auth.ts","./src/bodyvalidator.ts","./src/index.ts","./src/paginationorderingqueryparams.ts"],"version":"5.7.3"}
+{"root":["./src/auth.ts","./src/bodyvalidator.ts","./src/bodyzodvalidator.ts","./src/index.ts","./src/paginationorderingqueryparams.ts"],"version":"5.7.3"}

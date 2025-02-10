@@ -1,0 +1,39 @@
+name: E2E Test Workflow
+on:
+  pull_request:
+    branches: [ "main" ]
+    paths: [
+        "microservices/control/**",
+        "microservices/storage/**",
+        "frontend_new/**",
+        ".github/**",
+        "nginx/**"
+    ]
+  workflow_call:
+
+jobs:
+  test-e2e-msc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Run e2e tests
+        working-directory: .
+        run: yarn e2e:run
+
+      - name: Archive Cypress test results and videos on failure
+        if: failure()  # This will run only if the Cypress tests fail
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-artifacts-on-failure
+          path: |
+            e2e/cypress/screenshots/*
+            e2e/cypress/videos/*
+

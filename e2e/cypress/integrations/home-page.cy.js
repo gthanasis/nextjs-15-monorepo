@@ -1,10 +1,21 @@
-describe("Home page", () => {
+describe.only("Home page", () => {
   beforeEach(() => {
     cy.visit("/");
   });
 
-  it("Menu items should work", () => {
+  it("Should display the welcome message", () => {
     cy.viewport(1280, 720);
-    cy.contains("Your App");
+    cy.contains("Welcome to Your App");
+  });
+
+  it("Should display the login button", () => {
+    cy.viewport(1280, 720);
+    cy.contains("Login");
+  });
+
+  it("Login button should open popup", () => {
+    cy.viewport(1280, 720);
+    cy.contains("Login").click();
+    cy.get('[data-test*="login-form]').should("exist");
   });
 });

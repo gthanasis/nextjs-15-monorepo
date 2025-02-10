@@ -33,7 +33,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
   }, [prompt])
 
   return (
-    <div className={cn('flex flex-col p-4 ', className)} {...props}>
+    <div data-testid={'login-form'} className={cn('flex flex-col p-4 ', className)} {...props}>
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold">Login</h1>

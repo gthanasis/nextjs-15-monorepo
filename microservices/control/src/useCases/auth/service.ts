@@ -1,6 +1,6 @@
 import { BunyanLogger } from "logger";
 import { Credentials, OAuth2Client } from "google-auth-library";
-import { UserService } from "../users/service";
+import { UserService } from "../users/services/service";
 import { JWT } from "library";
 
 interface UserInfo {
