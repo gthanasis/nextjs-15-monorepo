@@ -1,7 +1,7 @@
 # Introduction
 This is a boilerplate Monorepo with next.js and node.js microservices
 
-## Detach 
+## Detach
 To detach this and start working on it you need to decide on some names:
 - Project name
 - Database name (optional, if you skip this it will default to the project name)
@@ -22,39 +22,38 @@ yarn detach --name=MY_APP --db=MY_DB
     - [Branches](#cactus-branches)
 
 ##  :beginner: About
-The project is built with Next.js and Node.js and utilizes a mongodb database. Both parts of the codebase are written in typescript. Here are some useful resources to get started. 
+The project is built with Next.js and Node.js and utilizes a mongodb database. Both parts of the codebase are written in typescript. Here are some useful resources to get started.
 * [React.js](https://reactjs.org/)
 * [Next.js](https://nextjs.org/)
 * [Node.js](https://nodejs.org/en/)
 * [TypeScript](https://www.typescriptlang.org/)
-* [CSS Modules](https://github.com/css-modules/css-modules)
-
-This repository uses yarn workspaces to handle dependencies and inner shared ts modules.
-* https://classic.yarnpkg.com/lang/en/docs/workspaces/
-
-###  :electric_plug: Installation
-To run the PLACEHOLDER_NAME locally you need to have docker installed (preferable >= 20.*) and docker compose.
-You can simply deploy the whole application locally by running the following command in the repository root.
-```sh
-$ yarn start:docker
-```
+* [Tailwind](https://tailwindcss.com/)
+* [MongoDB](https://www.mongodb.com/)
+* [Docker](https://www.docker.com/)
+* [Cypress](https://www.cypress.io/)
+* [Vitest](https://vitejs.dev/guide/)
+* [GitHub Actions](https://docs.github.com/en/actions)
+* [Auth.js](https://authjs.dev/)
+* [Turborepo](https://turborepo.dev/)
 
 ### :notebook: Dev Pre-Requisites
 List all the pre-requisites the system needs to develop this project.
-- nvm and the latest version of node.js (pref v18.12.1)
+- nvm and the latest version of node.js (pref v20)
 - yarn
 - docker 20.* or later
 
 ##  :wrench: Development
-To start developing the application you can run the following command in the repository root.
+To start developing the application you can run the
+following command in the repository root. You need Docker
+Engine running for this!
 
 ```sh
 $ yarn dev
 ```
 
-To run the frontend test suite you can run the following command
+To run tests for all workspaces you can run the following command in the repository root.
 ```shell
-$ cd frontend && yarn test
+$ yarn test
 ```
 
 ### E2e tests
@@ -75,7 +74,7 @@ yarn cypress:open
 If you want to reapply the fixtures you can run this command in the repo root
 ```shell
 yarn pree2e:run
-docker-compose -f docker-compose.yml -f docker-compose-test.yml up
+docker compose -f docker-compose.yml -f docker-compose-test.yml up
 ```
 
 ###  :fire: Contribution
@@ -83,7 +82,12 @@ docker-compose -f docker-compose.yml -f docker-compose-test.yml up
 Your contributions are always welcome and appreciated. Following are the things you can do to contribute to this project.
 
 1. **Create a pull request** <br>
-   You can pick an item from the trello board, assign it to you and move it to doing column. After doing this you can start by creating your branch named after the task you pick. E.g PLACEHOLDER_NAME_BRANCH_PREFIX-7. When you finish developing or need to collaborate on the changes you can open a pull request and move the issue from doing to code-review.
+   You can start by creating your branch named after the task you pick. E.g
+- feature/my-awesome-feature.
+- fix/unbroke-your-code.
+- chore/added-ci-cd.
+
+When you finish developing or need to collaborate on the changes you can open a pull request.
 
 
 ### :cactus: Branches
