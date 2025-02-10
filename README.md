@@ -43,9 +43,41 @@ List all the pre-requisites the system needs to develop this project.
 - docker 20.* or later
 
 ##  :wrench: Development
+Install the dependencies by running the following command in the root of the repository
+```shell
+yarn
+```
+
+Fill up your `.env` file with values from `.env.example` file for
+- frontend
+- microservices/control
+- microservices/storage
+```sh
+VAPID_PRIVATE_KEY=
+
+CONTROL_BACKEND_URL=http://localhost:3001
+STORAGE_BACKEND_URL=http://localhost:3002
+BACKEND_URL=http://localhost
+
+AUTH_URL=http://localhost
+AUTH_SECRET=super-secert-token
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_LOGIN_REDIRECT_URI=http://localhost/api/auth/callback/google
+NEXT_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoibmV4dCIsImlkIjoiaW50ZXJuYWwiLCJleHAiOjQ4ODg1NzQ0MjcsImltcGVyc29uYXRlIjp0cnVlLCJpbXBlcnNvbmF0b3JJRCI6bnVsbCwiaXNzIjoiaW50ZXJuYWwiLCJpYXQiOjE3MzQ5NzQ0Mjd9.dlCl-hmkrl1seUxr1nTnjaWtri-3f_PbIfwNf3IX3bU
+
+# Public
+NEXT_PUBLIC_VAPID_PUBLIC_KEY=
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=
+```
+
 To start developing the application you can run the
 following command in the repository root. You need Docker
 Engine running for this!
+
+NOTE: Under frontend and each microservice 
+- Fill up your `.env` file with values from `.env.example` file.
+
 
 ```sh
 $ yarn dev
