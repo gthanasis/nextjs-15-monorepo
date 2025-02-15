@@ -3,26 +3,23 @@ import { describe, it, expect } from 'vitest'
 import Page from './page'
 import { vi } from 'vitest'
 
-// Mock the `DashBoardLayout` to avoid testing its implementation
-vi.mock('@/components/layouts/dashboard/DashBoardLayout', () => ({
-  DashBoardLayout: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="dashboard-layout">{children}</div>
-  ),
-}))
+// No need to mock DashBoardLayout as it's not used in the component anymore
 
 describe('Page Component', () => {
-  it('renders the dashboard layout', () => {
+  it('displays the main heading', () => {
     render(<Page />)
-    expect(screen.getByTestId('dashboard-layout')).toBeInTheDocument()
-  })
-
-  it('displays the welcome message', () => {
-    render(<Page />)
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Welcome to Your App')
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Next.js 15 Monorepo')
   })
 
   it('displays the subtext', () => {
     render(<Page />)
-    expect(screen.getByText('This is your public landing page.')).toBeInTheDocument()
+    expect(screen.getByText('A simple, kickstart app with Authentication included.')).toBeInTheDocument()
+  })
+
+  it('renders the Get Started link', () => {
+    render(<Page />)
+    const link = screen.getByRole('link', { name: /get started/i })
+    expect(link).toBeInTheDocument()
+    expect(link).toHaveAttribute('href', '/public')
   })
 })
