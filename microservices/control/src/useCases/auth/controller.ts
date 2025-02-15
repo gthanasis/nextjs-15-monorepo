@@ -21,41 +21,6 @@ export class AuthController {
     };
   }
 
-  async loginGoogle(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
-    const url = await this.service.login();
-    res.json({ url });
-  }
-
-  async loginGoogleCallback(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
-    try {
-      const result = await this.service.callback(req.query.code as string);
-      res
-        .cookie("auth-token", result.token, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          expires: result.expiry,
-        })
-        .status(200)
-        .redirect(process.env.WEBAPP_URL as string);
-    } catch (error: any) {
-      this.logger.error(
-        { error },
-        `Error handling Google callback ${error?.message} for code ${req.query.code}`,
-      );
-      res
-        .status(200)
-        .redirect(`${process.env.WEBAPP_URL as string}/?error=login`);
-    }
-  }
-
   async loginDemo(
     req: Request,
     res: Response,
@@ -93,5 +58,10 @@ export class AuthController {
 
   async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
     res.clearCookie("auth-token").status(200).json({ logout: true });
+  }
+
+  async createFromGoogle(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const result = await this.service.createFromGoogle(req.body.user);
+    res.status(201).json(result);
   }
 }

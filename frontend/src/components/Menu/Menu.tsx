@@ -1,11 +1,11 @@
 import { auth } from '@/auth'
 import React from 'react'
 import Logo from '@/components/Logo/Logo'
-import NavLink from '@/components/layouts/dashboard/NavLink'
-import MenuAvatar from '@/components/layouts/dashboard/MenuAvatar'
+import MenuAvatar from '@/components/Menu/MenuAvatar'
 
 // Main Menu Component
-export default async function Menu() {
+export default async function Menu(props: { children: React.ReactNode }) {
+  const { children } = props
   const session = await auth()
   return (
     <header className="bg-white shadow">
@@ -13,11 +13,7 @@ export default async function Menu() {
         <div className="flex justify-between h-16">
           <div className="flex">
             <Logo />
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              <NavLink href="/dashboard">Dashboard</NavLink>
-              <NavLink href="/public">Public</NavLink>
-              <NavLink href="/semi-restricted">Semi restricted</NavLink>
-            </div>
+            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">{children}</div>
           </div>
           <div className="flex items-center">
             <MenuAvatar session={session} />

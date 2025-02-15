@@ -1,6 +1,6 @@
 export default async function PrivacyPage() {
   return (
-    <div className="px-4 py-6 sm:px-6 lg:px-8">
+    <div className="px-4 py-6 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl font-bold mb-4">Privacy Policy</h1>
         <p className="mb-4">

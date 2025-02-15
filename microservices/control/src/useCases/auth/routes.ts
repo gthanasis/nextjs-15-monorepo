@@ -10,16 +10,6 @@ export default (msc: ControlMsc): Router => {
     const service = generateAuthService(msc)
     const controller = new AuthController({ service, logger })
 
-    router.get(
-        '/auth/login/google',
-        AsyncErrorHandler(controller.loginGoogle.bind(controller))
-    )
-
-    router.get(
-        '/auth/login/google/callback',
-        AsyncErrorHandler(controller.loginGoogleCallback.bind(controller))
-    )
-
     if (process.env.ALLOW_DEMO_LOGIN) {
         router.get(
             '/auth/login/demo',
@@ -36,6 +26,12 @@ export default (msc: ControlMsc): Router => {
     router.get(
         '/auth/logout',
         AsyncErrorHandler(controller.logout.bind(controller))
+    )
+
+    router.post(
+      '/auth/next/createFromGoogle',
+      auth({ jtwLib, roles: ['next'], logger }),
+      AsyncErrorHandler(controller.createFromGoogle.bind(controller))
     )
 
     return router
