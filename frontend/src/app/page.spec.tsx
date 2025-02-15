@@ -1,9 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
 import Page from './page'
-import { vi } from 'vitest'
-
-// No need to mock DashBoardLayout as it's not used in the component anymore
 
 describe('Page Component', () => {
   it('displays the main heading', () => {
