@@ -2,12 +2,34 @@ import { JWT } from "library";
 import { BunyanLogger } from "logger";
 import { RequestHandler } from "microservice";
 
+interface JWTPayload {
+  id: string;
+  role: string;
+  [key: string]: unknown;
+}
+
 type Props = {
   jtwLib: JWT;
   roles?: string[];
   restrictUserId?: boolean;
   logger?: BunyanLogger;
   enforceUserId?: boolean;
+};
+
+const extractToken = (req: any): string | null => {
+  const authHeader = req.headers["authorization"];
+  const cookieToken = req.cookies?.["auth-token"];
+  const bearerToken = authHeader ? authHeader.split("Bearer ")[1] : null;
+  
+  return cookieToken || bearerToken || null;
+};
+
+const sendError = (
+  res: any,
+  status: number,
+  message: string,
+) => {
+  res.status(status).json({ error: message });
 };
 
 export const auth =
@@ -20,65 +42,76 @@ export const auth =
       logger,
       enforceUserId = false,
     } = props;
-    const token =
-      (req.cookies && req.cookies["auth-token"]) ||
-      (req.headers["authorization"] &&
-        (req.headers["authorization"] as string).split("Bearer ")[1]);
+
+    const token = extractToken(req);
     if (!token) {
-      logger?.warn("No auth token provided");
-      res.status(401).json({ error: "No auth token provided" });
-      return;
+      logger?.warn("Request received without authentication token");
+      return sendError(res, 401, "No auth token provided");
     }
 
     try {
-      const decoded = jtwLib.verify(token) as any;
-      const allowedRole = roles.length > 0 && roles.includes(decoded.role);
+      const decoded = jtwLib.verify(token) as JWTPayload;
+      const hasAllowedRole = roles.length === 0 || roles.includes(decoded.role);
       const isAdmin = decoded.role === "admin";
       const userIdParam = req.params.userId || req.query.userId;
 
-      if (!allowedRole) {
-        logger?.warn("No auth token provided");
-        res
-          .status(401)
-          .json({ error: `You don't have permission to access this resource` });
-        return;
+      if (!hasAllowedRole) {
+        logger?.warn(
+          `User with role ${decoded.role} attempted to access resource requiring roles: ${roles.join(", ")}`,
+          { requiredRoles: roles, userRole: decoded.role }
+        );
+        return sendError(
+          res,
+          401,
+          "You don't have permission to access this resource"
+        );
       }
 
-      res.locals.userId = decoded.id;
+      // Set decoded information in res.locals
       res.locals.decoded = decoded;
+      res.locals.userId = decoded.id;
 
-      if (enforceUserId) return next();
+      if (enforceUserId) {
+        return next();
+      }
 
+      // Admin-specific checks
       if (isAdmin) {
         if (restrictUserId && userIdParam == null) {
           logger?.warn(
-            { role: decoded.role },
-            "Admin tried to access a resource without providing a user ID",
+            "Admin attempted to access a restricted resource without providing a user ID",
+            { role: decoded.role }
           );
-          res.status(400).json({ error: `You need to provide a user ID` });
-          return;
+          return sendError(
+            res,
+            400,
+            "You need to provide a user ID"
+          );
         }
         res.locals.userId = userIdParam || null;
-      } else {
-        if (
-          req.query.userId ||
-          (req.params.userId && req.params.userId !== decoded.id)
-        ) {
-          logger?.warn(
-            { role: decoded.role },
-            "User tried to access a resource without permission",
-          );
-          res.status(401).json({
-            error: `You don't have permission to access this resource`,
-          });
-          return;
-        }
+        return next();
+      }
+
+      // Regular user checks
+      const requestedUserId = req.params.userId || req.query.userId;
+      if (requestedUserId && requestedUserId !== decoded.id) {
+        logger?.warn(
+          `User ${decoded.id} attempted to access resources of user ${requestedUserId}`,
+          { role: decoded.role, userId: decoded.id, requestedUserId }
+        );
+        return sendError(
+          res,
+          401,
+          "You don't have permission to access this resource"
+        );
       }
 
       return next();
     } catch (err) {
-      logger?.error(err);
-      res.status(401).json({ error: "Invalid auth token" });
-      return;
+      logger?.error("Token verification failed", {
+        error: err instanceof Error ? err.message : "Unknown error",
+        stack: err instanceof Error ? err.stack : undefined
+      });
+      return sendError(res, 401, "Invalid auth token");
     }
   };
