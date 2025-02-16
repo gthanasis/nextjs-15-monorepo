@@ -13,7 +13,7 @@ import { signOut, useSession } from 'next-auth/react'
 
 export default function UserDropdownMenu() {
   const logOut = () => {
-    signOut({ redirect: false })
+    signOut({})
   }
   const { data } = useSession()
   const { user } = data || {}
