@@ -53,4 +53,4 @@ describe('useAuthenticatedClient', () => {
     // Check if the client is returned
     expect(result.current).toBe(mockClient)
   })
-}) 
+})

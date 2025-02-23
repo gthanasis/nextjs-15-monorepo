@@ -7,7 +7,7 @@
     "build": "tsc --build",
     "dev": "tsc -w",
     "clean": "rm -rf dist",
-    "lint": "eslint src --quiet --ext .js --fix",
+    "lint": "eslint",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest --watch",
