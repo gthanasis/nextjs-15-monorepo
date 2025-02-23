@@ -1,22 +1,11 @@
 import { AxiosInstance } from "axios";
 import { IUser, IUserPublicProfile, CreateUserDto } from "./types/users";
 import { ApiResponse } from "./types/generic";
+import { Authenticated } from "./authenticated";
 
-export class UsersClient {
-  private client: AxiosInstance;
-
+export class UsersClient extends Authenticated {
   constructor(client: AxiosInstance) {
-    this.client = client;
-  }
-
-  public setToken(token: string | null) {
-    if (!token) return;
-    this.client.interceptors.request.use((config) => {
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-      return config;
-    });
+    super(client);
   }
 
   async getMe(): Promise<ApiResponse<IUserPublicProfile>> {
