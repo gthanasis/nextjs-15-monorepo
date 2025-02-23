@@ -29,9 +29,9 @@ export default (msc: ControlMsc): Router => {
     )
 
     router.post(
-      '/auth/next/createFromGoogle',
-      auth({ jtwLib, roles: ['next'], logger }),
-      AsyncErrorHandler(controller.createFromGoogle.bind(controller))
+        '/auth/next/createFromGoogle',
+        auth({ jtwLib, roles: ['next'], logger }),
+        AsyncErrorHandler(controller.createFromGoogle.bind(controller))
     )
 
     return router

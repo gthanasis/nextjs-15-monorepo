@@ -1,100 +1,100 @@
-import { BunyanLogger } from "logger";
-import { OAuth2Client } from "google-auth-library";
-import { UserService } from "../users/services/service";
-import { JWT } from "library";
+import { BunyanLogger } from 'logger'
+import { OAuth2Client } from 'google-auth-library'
+import { UserService } from '../users/services/service'
+import { JWT } from 'library'
 import {CreateUserDto, IUserPublicProfile} from 'api-client'
 
 export class AuthService {
-  private logger: BunyanLogger;
-  private userService: UserService;
-  private jwtLib: JWT;
+    private logger: BunyanLogger
+    private userService: UserService
+    private jwtLib: JWT
 
-  constructor({
-    logger,
-    userService,
-    jwtLib,
-  }: {
+    constructor ({
+        logger,
+        userService,
+        jwtLib
+    }: {
     logger: BunyanLogger;
     client: OAuth2Client;
     userService: UserService;
     jwtLib: JWT;
   }) {
-    this.logger = logger;
-    this.userService = userService;
-    this.jwtLib = jwtLib;
-  }
-
-  async demoLogin(userId: string) {
-    let userID = userId;
-    if (!userID) {
-      this.logger.debug(
-        `No user passed, resolving to the first admin user found.`,
-      );
-      const results = await this.userService.retrieve({
-        query: { role: "admin" },
-        order: { direction: null, order: null },
-        pagination: { page: 0, pageSize: 0 },
-        search: null,
-      });
-      userID = results.users[0].id;
+        this.logger = logger
+        this.userService = userService
+        this.jwtLib = jwtLib
     }
-    this.logger.debug(`Logging user ${userID} in`);
-    // Check if the user already exists in the database
-    const response = await this.userService.retrieve({
-      query: { id: userID },
-      order: { direction: null, order: null },
-      pagination: { page: 0, pageSize: 0 },
-      search: null,
-    });
 
-    if (response.count > 0) {
-      const existingUser = response.users[0];
-      // User already exists, log them in
-      this.logger.debug(
-        `Found user ${existingUser.id} with role ${existingUser.role} on demo login, logging them in.`,
-      );
-      this.logger.trace({ existingUser });
-      return await this.generateToken(existingUser.id, existingUser.role);
-    } else {
-      throw new Error("Did not find user for demo login");
+    async demoLogin (userId: string) {
+        let userID = userId
+        if (!userID) {
+            this.logger.debug(
+                `No user passed, resolving to the first admin user found.`
+            )
+            const results = await this.userService.retrieve({
+                query: { role: 'admin' },
+                order: { direction: null, order: null },
+                pagination: { page: 0, pageSize: 0 },
+                search: null
+            })
+            userID = results.users[0].id
+        }
+        this.logger.debug(`Logging user ${userID} in`)
+        // Check if the user already exists in the database
+        const response = await this.userService.retrieve({
+            query: { id: userID },
+            order: { direction: null, order: null },
+            pagination: { page: 0, pageSize: 0 },
+            search: null
+        })
+
+        if (response.count > 0) {
+            const existingUser = response.users[0]
+            // User already exists, log them in
+            this.logger.debug(
+                `Found user ${existingUser.id} with role ${existingUser.role} on demo login, logging them in.`
+            )
+            this.logger.trace({ existingUser })
+            return await this.generateToken(existingUser.id, existingUser.role)
+        } else {
+            throw new Error('Did not find user for demo login')
+        }
     }
-  }
 
-  async impersonateLogin(userID: string, impersonatorID: string) {
-    this.logger.debug(`Logging user in`);
-    // Check if the user already exists in the database
-    const response = await this.userService.retrieve({
-      query: { id: userID },
-      order: { direction: null, order: null },
-      pagination: { page: 0, pageSize: 0 },
-      search: null,
-    });
+    async impersonateLogin (userID: string, impersonatorID: string) {
+        this.logger.debug(`Logging user in`)
+        // Check if the user already exists in the database
+        const response = await this.userService.retrieve({
+            query: { id: userID },
+            order: { direction: null, order: null },
+            pagination: { page: 0, pageSize: 0 },
+            search: null
+        })
 
-    if (response.count > 0) {
-      const existingUser = response.users[0];
-      // User already exists, log them in
-      this.logger.debug(
-        `Found user ${existingUser.id} with role ${existingUser.role} on impersonate login, logging them in.`,
-      );
-      this.logger.trace({ existingUser });
-      return await this.generateToken(
-        existingUser.id,
-        existingUser.role,
-        true,
-        impersonatorID,
-      );
-    } else {
-      throw new Error("Did not find user for impersonate login");
+        if (response.count > 0) {
+            const existingUser = response.users[0]
+            // User already exists, log them in
+            this.logger.debug(
+                `Found user ${existingUser.id} with role ${existingUser.role} on impersonate login, logging them in.`
+            )
+            this.logger.trace({ existingUser })
+            return await this.generateToken(
+                existingUser.id,
+                existingUser.role,
+                true,
+                impersonatorID
+            )
+        } else {
+            throw new Error('Did not find user for impersonate login')
+        }
     }
-  }
 
-  async createFromGoogle(user: Partial<CreateUserDto> & { id: string }): Promise<{user: IUserPublicProfile, token: string}> {
-    const u = await this.userService.createFromProvider(user, "google", 'user');
-    const {token} = await this.generateToken(u.id, u.role);
-    return {user: u, token};
-  }
+    async createFromGoogle (user: Partial<CreateUserDto> & { id: string }): Promise<{user: IUserPublicProfile, token: string}> {
+        const u = await this.userService.createFromProvider(user, 'google', 'user')
+        const {token} = await this.generateToken(u.id, u.role)
+        return {user: u, token}
+    }
 
-  /**
+    /**
    *
    * Here are some best practices for using JWTs:
    *
@@ -116,28 +116,28 @@ export class AuthService {
    * @private
    */
 
-  private async generateToken(
-    userId: string,
-    role: string,
-    impersonate = false,
-    impersonatorID = "",
-  ): Promise<{ token: string; expiry: Date }> {
-    const oneWeekFromNow = new Date();
-    oneWeekFromNow.setDate(oneWeekFromNow.getDate() + 20);
-    const unixTimestamp = Math.floor(oneWeekFromNow.getTime() / 1000);
-    const impersonated = impersonate
-      ? { impersonate: true, impersonatorID }
-      : {};
-    return {
-      token: this.jwtLib.create({
-        payload: {
-          role,
-          id: userId,
-          exp: unixTimestamp,
-          ...impersonated,
-        },
-      }),
-      expiry: oneWeekFromNow,
-    };
-  }
+    private async generateToken (
+        userId: string,
+        role: string,
+        impersonate = false,
+        impersonatorID = ''
+    ): Promise<{ token: string; expiry: Date }> {
+        const oneWeekFromNow = new Date()
+        oneWeekFromNow.setDate(oneWeekFromNow.getDate() + 20)
+        const unixTimestamp = Math.floor(oneWeekFromNow.getTime() / 1000)
+        const impersonated = impersonate
+            ? { impersonate: true, impersonatorID }
+            : {}
+        return {
+            token: this.jwtLib.create({
+                payload: {
+                    role,
+                    id: userId,
+                    exp: unixTimestamp,
+                    ...impersonated
+                }
+            }),
+            expiry: oneWeekFromNow
+        }
+    }
 }
