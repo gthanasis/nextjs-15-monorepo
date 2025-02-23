@@ -13,7 +13,7 @@ export class UserController {
     private service: UserService
     private logger: BunyanLogger
 
-    constructor({ service, logger }: UserControllerProps) {
+    constructor ({ service, logger }: UserControllerProps) {
         this.service = service
         this.logger = logger
         this.activity = {
@@ -21,7 +21,7 @@ export class UserController {
         }
     }
 
-    async createFromProvider(req: Request, res: Response, next: NextFunction): Promise<void> {
+    async createFromProvider (req: Request, res: Response, next: NextFunction): Promise<void> {
         const { user } = req.body
         const { provider } = req.params
         const result = await this.service.createFromProvider(user, provider, 'user')
@@ -29,7 +29,7 @@ export class UserController {
         next()
     }
 
-    async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
+    async getAll (req: Request, res: Response, next: NextFunction): Promise<void> {
         const { pageSize, page, search, order, orderDirection, meta, ...restQuery } = req.query
         let searchTerms = null
         if (typeof search === 'string') searchTerms = search
@@ -52,14 +52,14 @@ export class UserController {
         next()
     }
 
-    async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
+    async getById (req: Request, res: Response, next: NextFunction): Promise<void> {
         const { userId } = req.params
         const result = await this.service.retrieveById(userId)
         res.json({ res: result.users })
         next()
     }
 
-    async post(req: Request, res: Response, next: NextFunction): Promise<void> {
+    async post (req: Request, res: Response, next: NextFunction): Promise<void> {
         const result = await this.service.insert(req.body)
         res.json({ res: result })
         res.locals.activity = {
@@ -70,7 +70,7 @@ export class UserController {
         next()
     }
 
-    async patch(req: Request, res: Response, next: NextFunction): Promise<void> {
+    async patch (req: Request, res: Response, next: NextFunction): Promise<void> {
         const { userId } = req.params
         const result = await this.service.update({
             filters: { id: userId },
@@ -85,7 +85,7 @@ export class UserController {
         next()
     }
 
-    async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
+    async delete (req: Request, res: Response, next: NextFunction): Promise<void> {
         const { userId } = req.params
         const result = {
             user: (await this.service.delete(userId)).length
@@ -99,7 +99,7 @@ export class UserController {
         }
     }
 
-    async getMe(req: Request, res: Response, next: NextFunction): Promise<void> {
+    async getMe (req: Request, res: Response, next: NextFunction): Promise<void> {
         const userId = res.locals.userId
         const result = await this.service.retrieve({
             query: { id: userId },
@@ -117,7 +117,7 @@ export class UserController {
         // next()
     }
 
-    async enable(req: Request, res: Response, next: NextFunction): Promise<void> {
+    async enable (req: Request, res: Response, next: NextFunction): Promise<void> {
         const { userId } = req.params
         const result = await this.service.enable(userId)
         res.json({ res: result })
@@ -129,7 +129,7 @@ export class UserController {
         next()
     }
 
-    async disable(req: Request, res: Response, next: NextFunction): Promise<void> {
+    async disable (req: Request, res: Response, next: NextFunction): Promise<void> {
         const { userId } = req.params
         const result = await this.service.disable(userId)
         res.json({ res: result })
@@ -141,7 +141,7 @@ export class UserController {
         next()
     }
 
-    async updateLocation(req: Request, res: Response, next: NextFunction): Promise<void> {
+    async updateLocation (req: Request, res: Response, next: NextFunction): Promise<void> {
         const { userId } = req.params
         const result = await this.service.updateLocation(userId, req.body)
         res.json({ res: result })
@@ -153,7 +153,7 @@ export class UserController {
         next()
     }
 
-    async updateLastSeenOn(req: Request, res: Response, next: NextFunction): Promise<void> {
+    async updateLastSeenOn (req: Request, res: Response, next: NextFunction): Promise<void> {
         const { userId } = req.params
         const result = await this.service.updateLastSeenOn(userId, req.body)
         res.json({ res: result })
@@ -165,7 +165,7 @@ export class UserController {
         next()
     }
 
-    async promote(req: Request, res: Response, next: NextFunction): Promise<void> {
+    async promote (req: Request, res: Response, next: NextFunction): Promise<void> {
         const { userId, role } = req.params
         const result = await this.service.promote(userId, role)
         res.json({ res: result })

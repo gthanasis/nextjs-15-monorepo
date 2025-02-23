@@ -8,12 +8,23 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { MoreHorizontal } from 'lucide-react'
 import { IUserPublicProfile } from 'api-client'
+import { useAuthenticatedClient } from '@/hooks/useAuthenticatedClient'
 
 export default function UsersTable(props: { users: IUserPublicProfile[] }) {
+  const client = useAuthenticatedClient()
   const [users, setUsers] = useState<IUserPublicProfile[]>(props.users)
 
-  const toggleUserStatus = (id: string) => {
-    setUsers((prev) => prev.map((user) => (user.id === id ? { ...user, isActive: !user.enabled } : user)))
+  const toggleUserStatus = async (user: IUserPublicProfile) => {
+    try {
+      await (user.enabled ? client.users.disable(user.id) : client.users.enable(user.id))
+      const { res } = await client.users.getAll({
+        pageSize: 10,
+        page: 1,
+      })
+      setUsers(res)
+    } catch (error) {
+      console.error('API Error:', error)
+    }
   }
 
   const deleteUser = (id: string) => {
@@ -45,7 +56,7 @@ export default function UsersTable(props: { users: IUserPublicProfile[] }) {
               <TableCell>{user.email}</TableCell>
               <TableCell className="capitalize">{user.role}</TableCell>
               <TableCell>
-                <Switch checked={user.enabled} onCheckedChange={() => toggleUserStatus(user.id)} />
+                <Switch checked={user.enabled} onCheckedChange={() => toggleUserStatus(user)} />
               </TableCell>
               <TableCell>
                 <DropdownMenu>
@@ -55,7 +66,7 @@ export default function UsersTable(props: { users: IUserPublicProfile[] }) {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => toggleUserStatus(user.id)}>
+                    <DropdownMenuItem onClick={() => toggleUserStatus(user)}>
                       {user.enabled ? 'Disable' : 'Enable'} User
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => deleteUser(user.id)} className="text-red-500">

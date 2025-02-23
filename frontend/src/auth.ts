@@ -80,7 +80,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
      * - `user` and `account` are only available on the first call (sign-in).
      * - Use this to store custom data in the token (e.g. user ID, roles, etc.).
      */
-    async jwt({ token, user, account, profile, isNewUser }) {
+    async jwt({ token, user, account }) {
       if (user && account && user.id && user.email) {
         try {
           const response = await client.users.createFromGoogle({
@@ -99,7 +99,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           throw error
         }
       }
-
       return token
     },
 
@@ -117,6 +116,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         ...token.dbUser,
         accessToken: token.accessToken,
         role: token.dbUser.role,
+        enabled: token.dbUser.enabled,
       }
 
       return session
