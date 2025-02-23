@@ -1,16 +1,14 @@
 import { AxiosInstance } from "axios";
 import { IUser, IUserPublicProfile, CreateUserDto } from "./types/users";
 import { ApiResponse } from "./types/generic";
+import { Authenticated } from "./authenticated";
 
-export class UsersClient {
-  private client: AxiosInstance;
-
+export class UsersClient extends Authenticated {
   constructor(client: AxiosInstance) {
-    this.client = client;
+    super(client);
   }
 
   async getMe(): Promise<ApiResponse<IUserPublicProfile>> {
-    console.log("getMe");
     const res =
       await this.client.get<ApiResponse<IUserPublicProfile>>("/users/me");
     return res.data;
@@ -43,11 +41,11 @@ export class UsersClient {
 
   async createFromGoogle(
     user: Partial<CreateUserDto> & { id: string },
-  ): Promise<ApiResponse<IUserPublicProfile>> {
-    const res = await this.client.post<ApiResponse<IUserPublicProfile>>(
-      "/users/google",
-      { user },
-    );
+  ): Promise<{ user: IUserPublicProfile; token: string }> {
+    const res = await this.client.post<{
+      user: IUserPublicProfile;
+      token: string;
+    }>("/auth/next/createFromGoogle", { user });
     return res.data;
   }
 
@@ -113,14 +111,12 @@ export class UsersClient {
     order?: string;
     orderDirection?: "asc" | "desc";
     [key: string]: any;
-  }): Promise<
-    ApiResponse<{
-      users: IUserPublicProfile[];
-      count: number;
-      pagination: { page: number; pageSize: number; filtered: number };
-      order: { order: string | null; direction: string | null };
-    }>
-  > {
+  }): Promise<{
+    res: IUserPublicProfile[];
+    count: number;
+    pagination: { page: number; pageSize: number; filtered: number };
+    order: { order: string | null; direction: string | null };
+  }> {
     const res = await this.client.get("/users", { params });
     return res.data;
   }

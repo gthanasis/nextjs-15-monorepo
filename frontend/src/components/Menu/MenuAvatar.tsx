@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react'
 import { Session } from 'next-auth'
 import LoginModal from '@/components/modals/LoginModal'
 import { Button } from '@/components/ui/button'
-import UserDropdownMenu from '@/components/layouts/dashboard/UserDropdownMenu'
+import UserDropdownMenu from '@/components/Menu/UserDropdownMenu'
 
 type Props = {
   session: Session | null

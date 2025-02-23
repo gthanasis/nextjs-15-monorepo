@@ -9,13 +9,14 @@ declare module 'next-auth' {
    * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
    */
   interface Session {
-    user: Partial<IUser> & DefaultSession['user']
+    user: Partial<IUser> & DefaultSession['user'] & { accessToken: string }
   }
 }
 
 declare module '@auth/core/jwt' {
   interface JWT {
     dbUser: Partial<IUser>
+    accessToken: string
   }
 }
 
@@ -79,10 +80,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
      * - `user` and `account` are only available on the first call (sign-in).
      * - Use this to store custom data in the token (e.g. user ID, roles, etc.).
      */
-    async jwt({ token, user, account, profile, isNewUser }) {
+    async jwt({ token, user, account }) {
       if (user && account && user.id && user.email) {
         try {
-          const { res } = await client.users.createFromGoogle({
+          const response = await client.users.createFromGoogle({
             id: user.id,
             name: user.name || '',
             profileImage: user.image || '',
@@ -90,14 +91,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           })
           return {
             ...token,
-            dbUser: res,
+            accessToken: response.token,
+            dbUser: response.user,
           }
         } catch (error) {
           console.error('Failed to create user from Google:', error)
           throw error
         }
       }
-
       return token
     },
 
@@ -110,12 +111,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
      *   that is accessible in `useSession()` or `getSession()`.
      */
     async session({ session, token, user }) {
-      // Example: Copy over data from `token` to `session.user`
-      // session.user.id = token.id;
-      // session.user.accessToken = token.accessToken; // if you stored it above
       session.user = {
         ...session.user,
         ...token.dbUser,
+        accessToken: token.accessToken,
+        role: token.dbUser.role,
+        enabled: token.dbUser.enabled,
       }
 
       return session

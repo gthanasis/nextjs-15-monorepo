@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import Microservice, { ServiceConstructorProps } from 'microservice'
-
-import {JWT, MongoDbPersistence} from 'library'
+import { JWT, MongoDbPersistence } from 'library'
+import { requestLogger } from 'middlewares'
 
 export class ControlMsc extends Microservice {
     public persistence: MongoDbPersistence
@@ -13,6 +13,12 @@ export class ControlMsc extends Microservice {
             connectionString: process.env.MONGO_CONNECTION_STRING as string
         })
         this.jtwLib = new JWT({ JWT_SECRET: process.env.JWT_SECRET_TOKEN as string, name: 'control-msc', logger: props.logger })
+
+        // Add request logger middleware
+        this.app.use(requestLogger({ 
+            logger: props.logger,
+            excludePaths: ['/health', '/metrics', '/favicon.ico'] 
+        }))
     }
 
     protected async createConnections (): Promise<void> {

@@ -3,19 +3,24 @@ describe.only("Home page", () => {
     cy.visit("/");
   });
 
-  it("Should display the welcome message", () => {
+  it("Should display the title", () => {
     cy.viewport(1280, 720);
-    cy.contains("Welcome to Your App");
+    cy.contains("Next.js 15 Monorepo");
   });
 
-  it("Should display the login button", () => {
+  it("Should display the subtitle", () => {
     cy.viewport(1280, 720);
-    cy.contains("Login");
+    cy.contains("A simple, kickstart app with Authentication included.");
   });
 
-  it.skip("Login button should open popup", () => {
+  it("Should display the Get Started button", () => {
     cy.viewport(1280, 720);
-    cy.contains("Login").click();
-    cy.get('[data-test*="login-form]').should("exist");
+    cy.contains("Get Started");
+  });
+
+  it("Get Started button should link to public page", () => {
+    cy.viewport(1280, 720);
+    cy.contains("Get Started").click();
+    cy.url().should("include", "/public");
   });
 });
