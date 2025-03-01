@@ -30,7 +30,6 @@ export default async function RootLayout({
         <meta name="theme-color" content="#000000" />
         <meta name="mobile-web-app-capable" content="yes" />
         <Script src="https://accounts.google.com/gsi/client" strategy="beforeInteractive" />
-        <title>My app</title>
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <SessionProvider>{children}</SessionProvider>
