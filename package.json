@@ -16,7 +16,7 @@
     "clean:nodemodules": "rm -rf node_modules && rm -rf **/node_modules && rm -rf **/**/node_modules",
     "pree2e:run": "docker compose -f docker-compose.yml -f docker-compose-test.yml down && docker volume rm nextjs-15-monorepo_mongotestdata || true",
     "e2e:run": "docker compose -f docker-compose.yml -f docker-compose-test.yml --env-file ./envs/.env.local.native --env-file ./envs/.env.local.docker --env-file ./envs/.env.local.test up --build --exit-code-from cypress",
-    "lighthouse:run": "docker compose -f docker-compose.yml -f docker-compose-lighthouse.yml --env-file ./envs/.env.local.docker --env-file ./envs/.env.local.test up --build --exit-code-from lighthouse",
+    "lighthouse:run": "docker compose -f docker-compose.yml -f docker-compose-lighthouse.yml --env-file ./envs/.env.local.native --env-file ./envs/.env.local.docker --env-file ./envs/.env.local.test up --build --exit-code-from lighthouse",
     "detach": "./tools/detach.sh"
   },
   "dependencies": {},

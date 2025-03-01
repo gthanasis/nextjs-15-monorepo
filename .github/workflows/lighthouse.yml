@@ -25,10 +25,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Run the application
-        working-directory: .
-        run: yarn start:docker
-
       - name: Run Lighthouse tests
         working-directory: .
         run: yarn lighthouse:run
