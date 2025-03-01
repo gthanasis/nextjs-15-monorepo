@@ -119,6 +119,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         enabled: token.dbUser.enabled,
       }
 
+      const expirationDate = new Date(session.expires)
+
+      // Check if session has expired and log out the user
+      if (expirationDate < new Date()) {
+        throw new Error('Session expired')
+      }
+
       return session
     },
 
