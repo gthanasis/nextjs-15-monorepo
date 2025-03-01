@@ -16,6 +16,15 @@ services:
       lhci autorun --config=/app/seo/.lighthouserc.json --collect.url=http://localhost"
     depends_on:
       - nginx
+      - frontend
+      - backend
+  mongo:
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongotestdata:/data/db
+      - ./tools/01-mongo-init.js:/docker-entrypoint-initdb.d/01-mongo-init.js:ro
+      - ./tools/02-mongo-fixtures.js:/docker-entrypoint-initdb.d/02-mongo-fixtures.js:ro
 
 volumes:
   mongotestdata:
