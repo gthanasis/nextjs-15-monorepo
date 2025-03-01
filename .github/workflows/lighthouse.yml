@@ -25,6 +25,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
+      - name: Run the application
+        working-directory: .
+        run: yarn start:docker
+
       - name: Run Lighthouse CI
         run: |
           npm install -g @lhci/cli
@@ -34,4 +38,6 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: lighthouse-result
+          name: light-house-artifacts-on-failure
+          path: |
+            seo/.lighthouseci/*
