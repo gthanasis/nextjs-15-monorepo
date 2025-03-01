@@ -15,9 +15,9 @@ services:
       echo 'Starting Lighthouse CI...' && 
       lhci autorun --config=/app/seo/.lighthouserc.json --collect.url=http://localhost"
     depends_on:
-      - nginx
       - frontend
-      - backend
+      - control
+      - mongo
   mongo:
     ports:
       - "27017:27017"
