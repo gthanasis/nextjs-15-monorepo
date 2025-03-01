@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
             key: 'Content-Security-Policy',
             value: `
               default-src 'self';
-              script-src 'self' https://accounts.google.com 'nonce-{nonce}' 'strict-dynamic';
+              script-src 'self' https://accounts.google.com 'nonce-{nonce}' 'strict-dynamic' 'unsafe-inline' 'unsafe-eval';
               style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
               img-src 'self' data: https:;
               font-src 'self' https://fonts.gstatic.com;
@@ -51,7 +51,7 @@ const nextConfig: NextConfig = {
             key: 'Content-Security-Policy',
             value: `
               default-src 'self';
-              script-src 'self' 'nonce-{nonce}';
+              script-src 'self' 'nonce-{nonce}' 'unsafe-inline';
               connect-src 'self';
             `.replace(/\s{2,}/g, ' '),
           },
