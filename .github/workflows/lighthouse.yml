@@ -29,15 +29,6 @@ jobs:
         working-directory: .
         run: yarn start:docker
 
-      - name: Run Lighthouse CI
-        run: |
-          npm install -g @lhci/cli
-          lhci autorun --config=seo/.lighthouserc.json
-  
-      - name: Archive Lighthouse results on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: light-house-artifacts-on-failure
-          path: |
-            seo/.lighthouseci/*
+      - name: Run Lighthouse tests
+        working-directory: .
+        run: yarn lighthouse:run
