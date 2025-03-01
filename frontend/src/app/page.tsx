@@ -1,8 +1,41 @@
-import { DashBoardLayout } from '@/components/layouts/DashBoardLayout'
-
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
+
+export const metadata = {
+  title: 'Next.js 15 Monorepo',
+  description: 'A simple, kickstart app with Authentication included.',
+  keywords: [
+    'Next.js',
+    'Monorepo',
+    'Authentication',
+    'Tailwind CSS',
+    'TypeScript',
+    'ESLint',
+    'Prettier',
+    'Jest',
+    'React Testing Library',
+    'Cypress',
+  ],
+  authors: [{ name: 'Thanasis Gkliatis', url: 'https://cv.gthanasis.com' }],
+  alternates: {
+    canonical: 'https://cv.gthanasis.com',
+  },
+  openGraph: {
+    title: 'Next.js 15 Monorepo',
+    description: 'A simple, kickstart app with Authentication included.',
+    url: 'https://cv.gthanasis.com',
+    siteName: 'Next.js 15 Monorepo',
+    images: [],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Next.js 15 Monorepo',
+    description: 'A simple, kickstart app with Authentication included.',
+    images: [],
+  },
+}
 
 export default function Page() {
   return (

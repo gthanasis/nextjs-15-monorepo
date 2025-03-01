@@ -1,0 +1,31 @@
+services:
+  lighthouse:
+    image: patrickhulce/lhci-client:latest
+    network_mode: "service:nginx"
+    volumes:
+      - ./seo:/app/seo
+      - ./lighthouse-reports:/app/reports
+    command: >
+      sh -c "echo 'Waiting for nginx to be ready...' && 
+      sleep 10 &&
+      echo 'Testing localhost:' && wget -q --spider http://localhost || echo 'Cannot reach localhost' && 
+      echo 'Current directory:' && pwd && 
+      echo 'SEO directory:' && ls -la /app/seo && 
+      echo 'Config file contents:' && cat /app/seo/.lighthouserc.json && 
+      echo 'Starting Lighthouse CI...' && 
+      lhci autorun --config=/app/seo/.lighthouserc.json --collect.url=http://localhost"
+    depends_on:
+      - frontend
+      - control
+      - mongo
+  mongo:
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongotestdata:/data/db
+      - ./tools/01-mongo-init.js:/docker-entrypoint-initdb.d/01-mongo-init.js:ro
+      - ./tools/02-mongo-fixtures.js:/docker-entrypoint-initdb.d/02-mongo-fixtures.js:ro
+
+volumes:
+  mongotestdata:
+

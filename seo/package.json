@@ -1,0 +1,12 @@
+{
+  "name": "seo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@lhci/cli": "^0.14.0"
+  },
+  "scripts": {
+    "lhci": "lhci autorun"
+  }
+}
