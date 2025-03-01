@@ -1,0 +1,37 @@
+name: Light house tests
+on:
+  pull_request:
+    branches: [ "main" ]
+    paths: [
+        "microservices/control/**",
+        "microservices/storage/**",
+        "frontend/**",
+        ".github/**",
+        "nginx/**",
+        "seo/**",
+    ]
+  workflow_call:
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli
+          lhci autorun --config=seo/.lighthouserc.json
+  
+      - name: Archive Lighthouse results on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-result
